@@ -9,7 +9,7 @@ class VpnConfig:
     port: int
 
     @classmethod
-    def load(cls, path: str = "config.toml") -> "VpnConfig":
+    def load(cls, path: str = "sockpuppet.toml") -> "VpnConfig":
         with open(path, "rb") as f:
             data = tomllib.load(f).get("vpn", {})
 
