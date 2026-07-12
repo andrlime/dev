@@ -1,0 +1,4 @@
+[vpn]
+name = "Northwestern"
+host = "andrlime@scholes.research.northwestern.edu"
+port = 1080
