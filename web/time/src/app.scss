@@ -1,0 +1,25 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem;
+  background-color: var(--mantine-color-body);
+
+  &.app--zoomed {
+    padding: 0;
+    overflow: hidden;
+
+    .app__chrome {
+      display: none;
+    }
+  }
+}
+
+.app__scheme_toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
