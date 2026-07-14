@@ -1,0 +1,24 @@
+@use "@/shared/breakpoints";
+
+.clock {
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1;
+  white-space: nowrap;
+
+  font-size: 3.5rem;
+  @include breakpoints.xs {
+    font-size: 5rem;
+  }
+  @include breakpoints.sm {
+    font-size: 8rem;
+  }
+  @include breakpoints.md {
+    font-size: 10rem;
+  }
+  @include breakpoints.lg {
+    font-size: 12rem;
+  }
+}
