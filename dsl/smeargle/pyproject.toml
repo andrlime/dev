@@ -1,0 +1,43 @@
+[project]
+name = "smeargle"
+version = "0.1.0"
+description = "Resume to typst templating DSL"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "typer>=0.15.0",
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "pyrefly>=1.0.0",
+    "ruff>=0.14.4",
+]
+
+[project.scripts]
+smeargle = "smeargle.cli:main"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.ruff.lint.per-file-ignores]
+# examples/*.py are DSL content files, not library code -- `from smeargle
+# import *` is the intended authoring idiom there, not an oversight.
+"examples/*.py" = ["F403", "F405"]
+
+[tool.pyrefly]
+project-includes = [
+    "**/*.py*",
+    "**/*.ipynb",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["smeargle"]
