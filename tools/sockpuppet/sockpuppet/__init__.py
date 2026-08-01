@@ -8,6 +8,7 @@ def main() -> None:
     from pathlib import Path
 
     from .backend import ManagedVpn, SensibleDefaultBackend
+    from .log import set_log_level
 
     default_config = Path(sys.argv[0]).parent.resolve() / "sockpuppet.toml"
 
@@ -26,7 +27,16 @@ def main() -> None:
         action="store_true",
         help="whether to automatically enable the VPN as RAII without a GUI",
     )
+    parser.add_argument(
+        "-L",
+        "--log-level",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        help="logging verbosity (default: %(default)s)",
+    )
     args = parser.parse_args()
+
+    set_log_level(args.log_level)
 
     cfg = VpnConfig.load(args.config)
     backend = SensibleDefaultBackend(cfg.name, cfg.host, cfg.port)

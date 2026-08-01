@@ -45,5 +45,8 @@ def get_logger(name: str) -> logging.Logger:
         handler = logging.StreamHandler()
         handler.setFormatter(ColoredFormatter())
         logger.addHandler(handler)
-        logger.setLevel(logging.DEBUG)
     return logger
+
+
+def set_log_level(level: int | str) -> None:
+    logging.getLogger().setLevel(level)
