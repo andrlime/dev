@@ -1,9 +1,9 @@
 import rumps
 
 from .backend.base import Backend, Result, State
-from .log import get_logger
+from .log import Logger
 
-logger = get_logger(__name__)
+logger = Logger.get(__name__)
 
 
 class VpnApp(rumps.App):

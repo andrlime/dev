@@ -3,10 +3,10 @@ import threading
 from types import TracebackType
 from typing import Self
 
-from ..log import get_logger
+from ..log import Logger
 from .base import Backend, Result
 
-logger = get_logger(__name__)
+logger = Logger.get(__name__)
 
 
 class ManagedVpn:

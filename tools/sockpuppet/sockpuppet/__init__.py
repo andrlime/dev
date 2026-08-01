@@ -8,7 +8,7 @@ def main() -> None:
     from pathlib import Path
 
     from .backend import ManagedVpn, SensibleDefaultBackend
-    from .log import set_log_level
+    from .log import Logger
 
     default_config = Path(sys.argv[0]).parent.resolve() / "sockpuppet.toml"
 
@@ -36,7 +36,10 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    set_log_level(args.log_level)
+    Logger.set_log_level(args.log_level)
+
+    main_logger = Logger.get(__name__)
+    main_logger.debug(f"Read args {str(args)} from CLI arguments")
 
     cfg = VpnConfig.load(args.config)
     backend = SensibleDefaultBackend(cfg.name, cfg.host, cfg.port)

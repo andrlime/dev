@@ -39,14 +39,19 @@ class ColoredFormatter(logging.Formatter):
         return f"{SentinelColor.GRAY}{timestamp}{reset}  {level}  {name}{SentinelColor.GRAY}: {message}{reset}"
 
 
-def get_logger(name: str) -> logging.Logger:
-    logger = logging.getLogger(name)
-    if not logger.handlers:
-        handler = logging.StreamHandler()
-        handler.setFormatter(ColoredFormatter())
-        logger.addHandler(handler)
-    return logger
+class Logger:
+    @staticmethod
+    def get(
+        name: str, formatter: logging.Formatter = ColoredFormatter()
+    ) -> logging.Logger:
+        logger = logging.getLogger(name)
+        if not logger.handlers:
+            handler = logging.StreamHandler()
+            handler.setFormatter(formatter)
+            logger.addHandler(handler)
+            logger.propagate = False
+        return logger
 
-
-def set_log_level(level: int | str) -> None:
-    logging.getLogger().setLevel(level)
+    @staticmethod
+    def set_log_level(level: int | str) -> None:
+        logging.getLogger().setLevel(level)

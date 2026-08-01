@@ -2,10 +2,10 @@ import subprocess
 import threading
 from collections.abc import Callable
 
-from ..log import get_logger
+from ..log import Logger
 from .base import Result, State
 
-logger = get_logger(__name__)
+logger = Logger.get(__name__)
 
 
 class SensibleDefaultBackend:
