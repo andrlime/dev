@@ -1,4 +1,4 @@
-from sockpuppet import main
+from sockpuppet.runner import Runner
 
 if __name__ == "__main__":
-    main()
+    Runner.run()

@@ -9,7 +9,7 @@ dependencies = [
 ]
 
 [project.scripts]
-sockpuppet = "sockpuppet:main"
+sockpuppet = "sockpuppet.runner:Runner.run"
 
 [dependency-groups]
 dev = [
