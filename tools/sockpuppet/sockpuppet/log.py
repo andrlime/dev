@@ -1,6 +1,7 @@
 import copy
 import logging
 from enum import StrEnum
+from pathlib import Path
 
 
 class SentinelColor(StrEnum):
@@ -10,6 +11,10 @@ class SentinelColor(StrEnum):
 
 
 class ColoredFormatter(logging.Formatter):
+    def __init__(self, no_color: bool = False) -> None:
+        super().__init__()
+        self.no_color = no_color
+
     @staticmethod
     def color_of_loglevel(level: int) -> str:
         match level:
@@ -27,31 +32,48 @@ class ColoredFormatter(logging.Formatter):
                 return ""
 
     def format(self, record: logging.LogRecord) -> str:
-        reset = SentinelColor.RESET
-
         record = copy.copy(record)
 
         timestamp = self.formatTime(record, self.datefmt)
-        level = f"{self.color_of_loglevel(record.levelno)}{record.levelname:<8}{reset}"
-        name = f"{SentinelColor.BOLD_WHITE}{record.name}{reset}"
         message = record.getMessage()
 
-        return f"{SentinelColor.GRAY}{timestamp}{reset}  {level}  {name}{SentinelColor.GRAY}: {message}{reset}"
+        gray = "" if self.no_color else str(SentinelColor.GRAY)
+        reset = "" if self.no_color else str(SentinelColor.RESET)
+        level_color = "" if self.no_color else self.color_of_loglevel(record.levelno)
+        name_color = "" if self.no_color else str(SentinelColor.BOLD_WHITE)
+
+        level = f"{level_color}{record.levelname:<8}{reset}"
+        name = f"{name_color}{record.name}{reset}"
+
+        return f"{gray}{timestamp}{reset}  {level}  {name}{gray}: {message}{reset}"
 
 
 class Logger:
-    @staticmethod
-    def get(
-        name: str, formatter: logging.Formatter = ColoredFormatter()
-    ) -> logging.Logger:
+    file_handler: logging.Handler | None = None
+    no_color: bool = False
+
+    @classmethod
+    def get(cls, name: str) -> logging.Logger:
         logger = logging.getLogger(name)
         if not logger.handlers:
             handler = logging.StreamHandler()
-            handler.setFormatter(formatter)
+            handler.setFormatter(ColoredFormatter(no_color=cls.no_color))
             logger.addHandler(handler)
             logger.propagate = False
+            if cls.file_handler is not None:
+                logger.addHandler(cls.file_handler)
         return logger
 
     @staticmethod
     def set_log_level(level: int | str) -> None:
         logging.getLogger().setLevel(level)
+
+    @classmethod
+    def set_log_file(cls, path: str | Path) -> None:
+        handler = logging.FileHandler(path)
+        handler.setFormatter(ColoredFormatter(no_color=True))
+        cls.file_handler = handler
+
+    @classmethod
+    def set_no_color(cls, no_color: bool) -> None:
+        cls.no_color = no_color

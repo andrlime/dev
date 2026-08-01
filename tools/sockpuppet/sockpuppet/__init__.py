@@ -1,4 +1,3 @@
-from .app import VpnApp as VpnApp
 from .config import VpnConfig as VpnConfig
 
 
@@ -7,7 +6,6 @@ def main() -> None:
     import sys
     from pathlib import Path
 
-    from .backend import ManagedVpn, SensibleDefaultBackend
     from .log import Logger
 
     default_config = Path(sys.argv[0]).parent.resolve() / "sockpuppet.toml"
@@ -34,9 +32,29 @@ def main() -> None:
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
         help="logging verbosity (default: %(default)s)",
     )
+    parser.add_argument(
+        "-f",
+        "--log-file",
+        default=None,
+        type=str,
+        metavar="PATH",
+        help="optional path to also write logs to a file",
+    )
+    parser.add_argument(
+        "--no-color",
+        action="store_true",
+        help="disable colored log output",
+    )
     args = parser.parse_args()
 
     Logger.set_log_level(args.log_level)
+    if args.no_color:
+        Logger.set_no_color(True)
+    if args.log_file:
+        Logger.set_log_file(args.log_file)
+
+    from .app import VpnApp
+    from .backend import ManagedVpn, SensibleDefaultBackend
 
     main_logger = Logger.get(__name__)
     main_logger.debug(f"Read args {str(args)} from CLI arguments")
