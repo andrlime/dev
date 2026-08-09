@@ -15,8 +15,10 @@ class ManagedVpn:
         self._stop = threading.Event()
 
     def run(self) -> None:
-        signal.signal(signal.SIGINT, lambda *_: self._stop.set())
-        signal.signal(signal.SIGTERM, lambda *_: self._stop.set())
+        # Must handle these signals with destructor to avoid zombifying VPN client
+        for s in [signal.SIGINT, signal.SIGTERM, signal.SIGHUP]:
+            signal.signal(s, lambda *_: self._stop.set())
+
         with self:
             logger.info("VPN enabled automatically, press Ctrl+C to stop...")
             self._stop.wait()

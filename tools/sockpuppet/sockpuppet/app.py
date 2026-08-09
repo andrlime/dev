@@ -1,3 +1,5 @@
+import signal
+
 import rumps
 
 from .backend.base import Backend, Result, State
@@ -13,6 +15,19 @@ class VpnApp(rumps.App):
         self.menu = ["Connect", "Disconnect"]
         rumps.events.on_sleep.register(self._on_sleep)
         rumps.events.before_quit.register(self._on_quit)
+
+        for s in [signal.SIGINT, signal.SIGTERM, signal.SIGHUP]:
+            signal.signal(s, self._on_signal)
+
+    def _on_signal(self, signum: int, _frame: object) -> None:
+        logger.info(f"Received signal {signum}, quitting")
+        rumps.quit_application()
+
+    @rumps.timer(1)
+    def _service_signals(self, _sender: rumps.Timer) -> None:
+        # Intentional nop to give interpreter a periodic chance to run
+        # signal handlers.
+        pass
 
     @rumps.clicked("Connect")
     def connect(self, _) -> None:
