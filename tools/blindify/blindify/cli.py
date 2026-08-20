@@ -7,11 +7,9 @@ from pathlib import Path
 from pypdfium2 import PdfiumError
 
 from blindify.compose import compose
+from blindify.constants import DEFAULT_DPI, MAX_RECOMMENDED_PAGES
 from blindify.filters import FILTER_REGISTRY
-from blindify.sources.pdf import PdfSource, is_pdf
-
-MAX_RECOMMENDED_PAGES = 8
-DEFAULT_DPI = 150
+from blindify.sources.pdf import PdfSource
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -71,7 +69,7 @@ def main(argv: list[str] | None = None) -> int:
     if not args.input.exists():
         parser.error(f"input file not found: {args.input}")
 
-    if not is_pdf(args.input):
+    if not PdfSource.is_pdf(args.input):
         parser.error(
             f"blindify only supports PDF input files, got: {args.input} (expected a .pdf file with a valid PDF header)"
         )

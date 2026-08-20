@@ -7,23 +7,23 @@ import pypdfium2 as pdfium
 
 from blindify.sources.base import SourcePage
 
-_PDF_MAGIC = b"%PDF-"
-
-
-def is_pdf(path: Path) -> bool:
-    if path.suffix.lower() != ".pdf":
-        return False
-    try:
-        with path.open("rb") as f:
-            header = f.read(len(_PDF_MAGIC))
-    except OSError:
-        return False
-    return header == _PDF_MAGIC
-
 
 class PdfSource:
+    PDF_MAGIC = b"%PDF-"
+
     def __init__(self, path: Path) -> None:
         self._document = pdfium.PdfDocument(str(path))
+
+    @staticmethod
+    def is_pdf(path: Path) -> bool:
+        if path.suffix.lower() != ".pdf":
+            return False
+        try:
+            with path.open("rb") as f:
+                header = f.read(len(PdfSource.PDF_MAGIC))
+        except OSError:
+            return False
+        return header == PdfSource.PDF_MAGIC
 
     def page_count(self) -> int:
         return len(self._document)
