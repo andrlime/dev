@@ -14,7 +14,7 @@ class Project(Block):
     bullets: list[str]
     organisation: str | None = None
 
-    def _to_typst(self) -> str:
+    def to_typst(self) -> str:
         if self.start == self.until:
             period_expr = Formatter.to_typst(self.start)
         else:

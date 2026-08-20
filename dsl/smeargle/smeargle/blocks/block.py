@@ -15,10 +15,8 @@ class Block(ABC):
         self.suppressed = False
         Arena.get().create(self)
 
-    def to_typst(self) -> str:
-        if self.suppressed:
-            return ""
-        return self._to_typst()
+    def render(self) -> str | None:
+        return self.to_typst() if not self.suppressed else None
 
     @abstractmethod
-    def _to_typst(self) -> str: ...
+    def to_typst(self) -> str: ...

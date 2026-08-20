@@ -16,7 +16,7 @@ class School(Block):
     degrees: list[Degree]
     gpa: str | None = None
 
-    def _to_typst(self) -> str:
+    def to_typst(self) -> str:
         def period_expr():
             if self.start == self.until or self.start == "" or self.start is None:
                 return f"{Formatter.to_typst(self.until)}"

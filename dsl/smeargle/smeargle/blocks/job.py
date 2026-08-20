@@ -23,7 +23,7 @@ class Job(Block):
         super().__post_init__()
         self.bullets = [b for b in self.bullets if b is not None]
 
-    def _to_typst(self) -> str:
+    def to_typst(self) -> str:
         period_expr = f'{Formatter.to_typst(self.start)} + " – " + {Formatter.to_typst(self.until)}'
         bullets_expr = (
             "(" + ", ".join(f"text({Formatter.to_typst(b)})" for b in self.bullets if b is not None) + ",)"

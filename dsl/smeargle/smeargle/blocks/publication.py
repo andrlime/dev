@@ -10,5 +10,5 @@ from .block import Block
 class Publication(Block):
     citation: str
 
-    def _to_typst(self) -> str:
+    def to_typst(self) -> str:
         return f"#pub({Formatter.to_typst(self.citation)})"

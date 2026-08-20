@@ -17,5 +17,6 @@ class Resume:
         return cls(page=page, blocks=Arena.get().drain())
 
     def to_typst(self) -> str:
-        parts = [self.page.to_typst(), *(block.to_typst() for block in self.blocks)]
-        return "\n".join(part for part in parts if part)
+        rendered = (block.render() for block in self.blocks)
+        parts = [self.page.to_typst(), *(part for part in rendered if part is not None)]
+        return "\n".join(parts)

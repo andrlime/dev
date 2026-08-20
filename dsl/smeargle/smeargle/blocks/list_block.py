@@ -13,9 +13,10 @@ class ListBlock(Block):
     label: str
     items: list[str | TwoColumn]
 
-    def _to_typst(self) -> str:
-        item_exprs = []
-        for item in self.items:
+    def to_typst(self) -> str:
+        def item_expr(item: str | TwoColumn) -> str:
             expr = item.to_typst() if isinstance(item, TwoColumn) else Formatter.to_typst(item)
-            item_exprs.append(f"text({expr})")
+            return f"text({expr})"
+
+        item_exprs = [item_expr(item) for item in self.items]
         return f'#tags(\n  "{Escape.string(self.label)}",\n  (' + ", ".join(item_exprs) + ",),\n)"

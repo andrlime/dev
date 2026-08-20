@@ -10,5 +10,5 @@ from .block import Block
 class SectionHeader(Block):
     title: str
 
-    def _to_typst(self) -> str:
+    def to_typst(self) -> str:
         return f'#section("{Escape.string(self.title)}")'
