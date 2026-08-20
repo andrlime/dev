@@ -3,8 +3,8 @@ import threading
 from types import TracebackType
 from typing import Self
 
-from ..log import Logger
-from .base import Backend, Result
+from .backend.base import Backend, Result
+from .log import Logger
 
 logger = Logger.get(__name__)
 

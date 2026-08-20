@@ -13,7 +13,8 @@ class Runner:
         Runner._configure_logging(args)
 
         from .app import VpnApp
-        from .backend import ManagedVpn, SensibleDefaultBackend
+        from .backend import SensibleDefaultBackend
+        from .managed import ManagedVpn
 
         logger = Logger.get(__name__)
         logger.debug(f"Read args {args} from CLI arguments")
