@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 class Formatter:
     STYLE_OF_CHAR = {"*": "strong", "_": "emph", "`": "raw"}
+    ESCAPE_CHAR = "~"
 
     @dataclass
     class StyledRun:
@@ -26,11 +27,19 @@ class Formatter:
         stack: list[str] = []
         runs: list[Formatter.StyledRun] = []
         current = ""
+        escapable = set(Formatter.STYLE_OF_CHAR) | {Formatter.ESCAPE_CHAR}
 
         def in_raw() -> bool:
             return bool(stack) and stack[-1] == "`"
 
-        for ch in text:
+        i = 0
+        while i < len(text):
+            ch = text[i]
+            if ch == Formatter.ESCAPE_CHAR and i + 1 < len(text) and text[i + 1] in escapable:
+                current += text[i + 1]
+                i += 2
+                continue
+
             if stack and ch == stack[-1]:
                 runs.append(Formatter.StyledRun([Formatter.STYLE_OF_CHAR[c] for c in stack], current))
                 stack.pop()
@@ -41,6 +50,8 @@ class Formatter:
                 current = ""
             else:
                 current += ch
+
+            i += 1
 
         runs.append(Formatter.StyledRun([Formatter.STYLE_OF_CHAR[c] for c in stack], current))
         return runs

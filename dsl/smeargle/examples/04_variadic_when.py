@@ -50,7 +50,7 @@ When(
         start="May 2019",
         until="February 2022",
         where="Various sinkholes and dive bars",
-        bullets=["Never lost a student. Lost one bass amp, permanently, to a storm surge."],
+        bullets=["Never lost a student. Lost one bass amp, `permanently ~``, to a storm surge."],
     ),
 )
 
