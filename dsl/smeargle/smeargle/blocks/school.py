@@ -23,14 +23,19 @@ class School(Block):
             assert self.start is not None
             return f'{Formatter.to_typst(self.start)} + " – " + {Formatter.to_typst(self.until)}'
 
-        degree_expr = ' + "; " + '.join(degree.to_typst() for degree in self.degrees) if self.degrees else '""'
+        def degree_expr():
+            if not self.degrees:
+                return '""'
+            entries = ",\n    ".join(degree.to_typst() for degree in self.degrees)
+            return f"(\n    {entries},\n  )"
+
         gpa_expr = Formatter.to_typst(self.gpa) if self.gpa else '""'
 
         return (
             "#school(\n"
             f"  {Formatter.to_typst(self.name)},\n"
             f"  {period_expr()},\n"
-            f"  {degree_expr},\n"
+            f"  {degree_expr()},\n"
             f"  {Formatter.to_typst(self.where)},\n"
             f"  {gpa_expr},\n"
             ")"

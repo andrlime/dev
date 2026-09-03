@@ -12,7 +12,7 @@ class Degree:
     note: str | None = None
 
     def to_typst(self) -> str:
-        expr = f'{Formatter.to_typst(self.major)} + ", " + {Formatter.to_typst(self.title)}'
+        expr = f'{Formatter.to_typst(self.title)} + ", " + {Formatter.to_typst(self.major)}'
         if self.note:
             expr += f' + " (" + {Formatter.to_typst(self.note)} + ")"'
         return expr
