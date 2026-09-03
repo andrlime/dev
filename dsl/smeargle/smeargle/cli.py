@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import subprocess
+from importlib.metadata import version as get_version
 from pathlib import Path
 from typing import Annotated
 
@@ -10,6 +11,24 @@ from .fork import Fork, MergeConflict
 from .runtime import Runtime
 
 app = typer.Typer()
+
+
+def _version_callback(value: bool) -> None:
+    if value:
+        typer.echo(get_version("smeargle"))
+        raise typer.Exit()
+
+
+@app.callback()
+def main_options(
+    version: Annotated[
+        bool,
+        typer.Option(
+            "--version", callback=_version_callback, is_eager=True, help="Print the installed version and exit"
+        ),
+    ] = False,
+) -> None:
+    pass
 
 
 @app.command()
