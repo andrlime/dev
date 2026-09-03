@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import InitVar, dataclass
 
 from ..formatter import Formatter
-from .block import Block
+from .block import Block, Resolvable
 from .degree import Degree
 
 
@@ -13,8 +13,16 @@ class School(Block):
     start: str | None
     until: str
     where: str
-    degrees: list[Degree] = field(default_factory=list)
+    degrees: InitVar[list[Resolvable[Degree]] | None] = None
     gpa: str | None = None
+
+    def __post_init__(self, degrees: list[Resolvable[Degree]] | None) -> None:
+        """
+        Does the following, in addition to Block.__post_init__:
+        1. Flattens degrees, resolving When(...) tuples as appropriate.
+        """
+        super().__post_init__()
+        self._degrees: list[Degree] = Block.resolve(degrees or [])
 
     def to_typst(self) -> str:
         def period_expr():
@@ -24,9 +32,9 @@ class School(Block):
             return f'{Formatter.to_typst(self.start)} + " – " + {Formatter.to_typst(self.until)}'
 
         def degree_expr():
-            if not self.degrees:
+            if not self._degrees:
                 return '""'
-            entries = ",\n    ".join(degree.to_typst() for degree in self.degrees)
+            entries = ",\n    ".join(degree.to_typst() for degree in self._degrees)
             return f"(\n    {entries},\n  )"
 
         gpa_expr = Formatter.to_typst(self.gpa) if self.gpa else '""'

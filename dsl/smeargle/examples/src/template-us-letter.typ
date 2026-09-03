@@ -45,7 +45,7 @@
 }
 
 #let section(header) = {
-    section_header(header, rgb("#009bd7"))
+    section_header(header, rgb("#934274"))
 }
 
 #let icon(name, label, shift: 1.5pt) = {
@@ -76,7 +76,7 @@
     github,
 ) = {
     set align(center)
-    big_header(name, rgb("#009bd7"))
+    big_header(name, rgb("#934274"))
     text(10pt)[
         #tabulate((
             icon("phone", phone),
@@ -104,11 +104,22 @@
             #h(1fr)
             #text(year)
         ]
-        #if degree != "" [
-            #linebreak()
-            #text(10pt)[
-                #degree #h(1fr) #gpa
+        #if type(degree) == content or type(degree) == str [
+            #if degree != "" [
+                #linebreak()
+                #text(10pt)[
+                    #degree
+                ]
             ]
+        ] else if type(degree) == array [
+            #for d in degree [
+                #linebreak()
+                #text(10pt)[
+                    #d
+                ]
+            ]
+        ] else [
+            #panic("school(): degree must be a string or an array of strings, got " + str(type(degree)))
         ]
     ]
 }
