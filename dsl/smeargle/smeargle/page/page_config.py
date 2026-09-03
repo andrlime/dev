@@ -14,7 +14,7 @@ class PageConfig:
     justify: bool
     pagesize: str
     font: str
-    template: str = "./src/template-us-letter.typ"
+    template: str
 
     def to_typst(self) -> str:
         return "\n".join(

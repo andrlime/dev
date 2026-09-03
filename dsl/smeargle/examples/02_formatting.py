@@ -14,6 +14,7 @@ page = PageConfig(
     justify=True,
     pagesize="us-letter",
     font="DINOT",
+    template="./src/template-us-letter.typ",
 )
 
 SectionHeader("Education")

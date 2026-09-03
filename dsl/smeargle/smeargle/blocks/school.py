@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from ..formatter import Formatter
 from .block import Block
@@ -13,7 +13,7 @@ class School(Block):
     start: str | None
     until: str
     where: str
-    degrees: list[Degree]
+    degrees: list[Degree] = field(default_factory=list)
     gpa: str | None = None
 
     def to_typst(self) -> str:
