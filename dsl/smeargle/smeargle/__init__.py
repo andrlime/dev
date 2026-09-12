@@ -1,4 +1,5 @@
 from .arena import Arena as Arena
+from .arena import Notes as Notes
 from .arena import When as When
 from .blocks import Award as Award
 from .blocks import Block as Block
