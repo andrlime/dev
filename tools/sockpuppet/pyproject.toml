@@ -5,6 +5,7 @@ description = "A simple wrapper for SOCKS proxy"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "joltik",
     "rumps>=0.4.0",
 ]
 
@@ -22,3 +23,6 @@ project-includes = [
     "**/*.py*",
     "**/*.ipynb",
 ]
+
+[tool.uv.sources]
+joltik = { path = "../../lib/joltik", editable = true }

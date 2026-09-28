@@ -2,6 +2,8 @@ import subprocess
 import threading
 from collections.abc import Callable
 
+from joltik.networking import check_internet_connection
+
 from ..log import Logger
 from .base import Result, State
 
@@ -38,6 +40,10 @@ class SensibleDefaultBackend:
             logger.warning("Already connected, ignoring connect request")
             return Result.FAIL
 
+        if not check_internet_connection():
+            logger.error("No network connection, aborting tunnel setup")
+            return Result.FAIL
+
         logger.info("Connecting to %s:%d", self.host, self.port)
         try:
             self._process = subprocess.Popen(
@@ -48,6 +54,14 @@ class SensibleDefaultBackend:
 
         except OSError as e:
             logger.error("Failed to start tunnel: %s", e)
+            return Result.FAIL
+
+        if not check_internet_connection():
+            logger.error("Lost network connection while establishing tunnel, aborting")
+            self._process.kill()
+            self._process.wait()
+            self._process = None
+            self.set_proxy(enable=False)
             return Result.FAIL
 
         threading.Thread(
