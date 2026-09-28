@@ -1,0 +1,1 @@
+from joltik.networking import check_internet_connection as check_internet_connection
