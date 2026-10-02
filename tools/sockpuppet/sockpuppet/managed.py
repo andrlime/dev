@@ -1,4 +1,5 @@
 import signal
+import sys
 import threading
 from types import TracebackType
 from typing import Self
@@ -19,9 +20,13 @@ class ManagedVpn:
         for s in [signal.SIGINT, signal.SIGTERM, signal.SIGHUP]:
             signal.signal(s, lambda *_: self._stop.set())
 
-        with self:
-            logger.info("VPN enabled automatically, press Ctrl+C to stop...")
-            self._stop.wait()
+        try:
+            with self:
+                logger.info("VPN enabled automatically, press Ctrl+C to stop...")
+                self._stop.wait()
+        except RuntimeError as e:
+            logger.error(str(e))
+            sys.exit(1)
 
     def __enter__(self) -> Self:
         if self.backend.connect(self._on_unexpected_exit) is Result.FAIL:
