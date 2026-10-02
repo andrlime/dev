@@ -29,7 +29,7 @@ def sync(directory: Path, config: AlakazamConfig, *, dry_run: bool) -> None:
         RemoteSync(
             source=directory,
             destination=destination,
-            delete=True,
             dry_run=dry_run,
             exclude=config.ignore_list,
+            **config.rsync_options,
         ).run()
