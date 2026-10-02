@@ -32,6 +32,10 @@ class AlakazamConfig:
         drive_name = data.get("drive_name")
         if not drive_name:
             raise ValueError("Config missing required field: 'drive_name'")
+        if isinstance(drive_name, str):
+            drive_name = [drive_name]
+        elif not isinstance(drive_name, list) or not all(isinstance(entry, str) for entry in drive_name):
+            raise ValueError("Config field 'drive_name' must be a string or a list of strings")
 
         ignore_list = DEFAULT_IGNORE_LIST + [
             pattern for pattern in data.get("ignore_list", []) if pattern not in DEFAULT_IGNORE_LIST

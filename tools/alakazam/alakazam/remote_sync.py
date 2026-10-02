@@ -25,6 +25,7 @@ class RemoteSync:
     whole_file: bool = False
     one_file_system: bool = False
     prune_empty_dirs: bool = False
+    mkpath: bool = False
 
     # What counts as "changed"
     checksum: bool = False
@@ -113,6 +114,8 @@ class RemoteSync:
             cmd.append("-x")
         if self.prune_empty_dirs:
             cmd.append("--prune-empty-dirs")
+        if self.mkpath:
+            cmd.append("--mkpath")
 
         if self.checksum:
             cmd.append("-c")

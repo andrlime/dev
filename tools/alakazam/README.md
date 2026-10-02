@@ -18,7 +18,7 @@ delete = true
 checksum = true
 ```
 
-- `drive_name`: mount points to sync to. Every one that's currently mounted gets synced; any that aren't mounted are skipped with a warning (it's an error only if none are mounted).
+- `drive_name`: mount points to sync to, or remote rsync destinations in `[user@]host:path` form (e.g. `"banana:backups"`), synced over SSH. Local mount points that aren't currently mounted are skipped with a warning; remote specs are always attempted. It's an error only if no destination is usable.
 - `drive_path`: subpath on each drive to sync the directory into.
 - `ignore_list`: rsync `--exclude` patterns, in addition to the defaults (`.venv`, `.claude`, `.DS_Store`, `__pycache__`).
 - `rsync`: optional table overriding any `RemoteSync` field (see `alakazam/remote_sync.py`) by name, e.g. `delete`, `checksum`, `bwlimit`. Omitted fields use `RemoteSync`'s own default. `source`, `destination`, `dry_run`, and `exclude` are set by alakazam itself and can't be overridden here.
