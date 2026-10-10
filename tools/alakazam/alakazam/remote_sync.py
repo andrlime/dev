@@ -45,11 +45,11 @@ class RemoteSync:
     force: bool = False
 
     # Output / safety
-    verbose: bool = True
+    verbose: bool = False
     human_readable: bool = True
-    stats: bool = True
+    stats: bool = False
     progress: bool = False
-    itemize_changes: bool = False
+    itemize_changes: bool = True
     dry_run: bool = False
 
     # Performance / transport
