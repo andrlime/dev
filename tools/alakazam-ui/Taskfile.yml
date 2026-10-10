@@ -1,0 +1,29 @@
+version: '3'
+
+tasks:
+  lint:
+    cmds:
+      - uv run ruff format --check .
+      - uv run ruff check .
+  format:
+    cmds:
+      - uv run ruff check --select I --fix .
+      - uv run ruff format .
+  strict-check:
+    cmds:
+      - uv run pyrefly check . --project-excludes "dist/**" --project-excludes "packaging/build/**" --project-excludes "packaging/.venv/**"
+  checks:
+    cmds:
+      - task: format
+      - task: lint
+      - task: strict-check
+  build-app:
+    desc: Build dist/Alakazam.app via py2app
+    cmds:
+      - bash packaging/build.sh
+  install-app:
+    desc: Build Alakazam.app and install it to /Applications
+    cmds:
+      - task: build-app
+      - rm -rf /Applications/Alakazam.app
+      - cp -R dist/Alakazam.app /Applications/Alakazam.app
